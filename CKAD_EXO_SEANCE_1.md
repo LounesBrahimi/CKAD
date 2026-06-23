@@ -1,7 +1,7 @@
 # 🎯 CKAD : Séance 1, Pods
 ### Récap des exercices + solutions : à garder pour réviser !
 
----
+
 
 ## 🧠 Exercice 1 : Quiz de raisonnement
 
@@ -15,7 +15,7 @@
 
 **S4.** Quelle différence entre `kubectl create` et `kubectl apply` ? Lequel utiliser à l'exam ?
 
----
+
 
 ### ✅ Solution
 
@@ -41,7 +41,7 @@ kubectl get pod my-pod -n <ns>
 
 💡 **À l'exam : toujours `apply`.** Si tu resoumets par erreur, ça passe quand même.
 
----
+
 
 ## 🛠️ Exercice 2 : Boîte à outils kubectl
 
@@ -49,7 +49,7 @@ kubectl get pod my-pod -n <ns>
 
 > Cluster `k8s-staging`. Le Pod `api-pod` (namespace `backend`) est en `CrashLoopBackOff` 💥. Sans le modifier, trouve la cause du crash et note l'exit code.
 
----
+
 
 ### ✅ Solution
 
@@ -84,7 +84,7 @@ kubectl run debug --image=busybox \
 
 ⚠️ **Piège classique** : `kubectl logs` sans `--previous` ne renvoie rien si le container a déjà redémarré après son crash.
 
----
+
 
 ## ✍️ Exercice 3 : Écrire un Pod simple
 
@@ -92,7 +92,7 @@ kubectl run debug --image=busybox \
 
 > Cluster `k8s-prod`. Crée un Pod nginx dans le namespace `monitoring`, avec les labels `app=nginx` et `env=prod`. Il doit redémarrer automatiquement s'il s'arrête.
 
----
+
 
 ### ✅ Solution
 
@@ -132,7 +132,7 @@ kubectl get pod nginx-pod -n monitoring --show-labels  # → labels présents ?
 - `namespace` se met dans `metadata`, pas dans `spec`
 - `containers` est une **liste** → tiret `-` obligatoire devant `name`
 
----
+
 
 ## ⚡ Exercice 4 : Speed run dry-run
 
@@ -140,7 +140,7 @@ kubectl get pod nginx-pod -n monitoring --show-labels  # → labels présents ?
 
 > Cluster `k8s-dev`. Crée en moins de **2 minutes** ⏱️ un Pod `cache-pod` (image `redis:7`, namespace `infra`, label `tier=cache`), interdit d'écrire le YAML à la main !
 
----
+
 
 ### ✅ Solution
 
@@ -173,7 +173,7 @@ kubectl cp cache-pod:/data/fichier.txt ./local.txt -n infra
 - Oublier `-o yaml > fichier.yaml` → rien n'est sauvegardé sur le disque !
 - `dry-run` ne crée RIEN dans le cluster, il faut quand même faire `kubectl apply` après 😅
 
----
+
 
 ## 🧩 Exercice 5 : Le YAML complet
 
@@ -181,7 +181,7 @@ kubectl cp cache-pod:/data/fichier.txt ./local.txt -n infra
 
 > Cluster `k8s-prod`. L'app `worker` (image `busybox`) ne doit démarrer qu'**après** qu'une tâche d'init soit terminée (image `busybox`, commande `echo "init ok"`). L'app lance `/bin/sh -c "echo running; sleep 3600"`. Variable d'env : `APP_ENV=production`. Limite mémoire **128Mi**, CPU **250m**. Namespace : `workers`.
 
----
+
 
 ### ✅ Solution
 
@@ -216,7 +216,7 @@ spec:
 🧠 **`command` vs `args`, le truc à retenir :**
 
 | Dockerfile | YAML |
-|---|---|
+|||
 | `ENTRYPOINT` | `command` |
 | `CMD` | `args` |
 
@@ -237,7 +237,7 @@ kubectl describe pod worker -n workers
 - `250m` = 0.25 vCPU. Si tu oublies le `m` → `250` vCPU et ton Pod ne sera **jamais** schedulé 💀
 - `limits` sans `requests` → Kubernetes copie automatiquement les limits dans requests
 
----
+
 
 ## 🎁 Bonus 1 : Modifier un Pod qui tourne déjà
 
@@ -245,7 +245,7 @@ kubectl describe pod worker -n workers
 
 > Le Pod `nginx-pod` (namespace `monitoring`) tourne avec `nginx:1.25`. Passe-le en `nginx:1.26` sans le supprimer à la main.
 
----
+
 
 ### ✅ Solution : 3 façons de faire
 
@@ -270,7 +270,7 @@ kubectl replace --force -f pod.yaml
 
 ⚠️ **Piège :** `kubectl edit` refuse souvent de changer l'image directement (champ immutable) → bascule sur `replace --force`.
 
----
+
 
 ## 🎁 Bonus 2 : Pod avec un sidecar
 
@@ -278,7 +278,7 @@ kubectl replace --force -f pod.yaml
 
 > Crée un Pod `app-with-sidecar` avec 2 containers : `app` (busybox, `sleep 3600`) et un sidecar `logger` (busybox, `sh -c "while true; do date; sleep 5; done"`).
 
----
+
 
 ### ✅ Solution
 
@@ -311,7 +311,7 @@ kubectl get pod app-with-sidecar
 
 ⚠️ **Piège :** sans `-c <nom>` sur un Pod multi-container, `kubectl logs` plante avec "specify container".
 
----
+
 
 ## 📌 Les 5 trucs à retenir de cette séance
 
@@ -321,6 +321,6 @@ kubectl get pod app-with-sidecar
 4. ⚡ **`--dry-run=client -o yaml`** pour ne jamais écrire de YAML à la main
 5. 📖 **`kubectl explain`** = ta doc à l'exam, pas Google
 
----
+
 
 *Séance 1 · Pods · Garde ce doc sous la main pour réviser avant la prochaine séance 💪*
